@@ -177,9 +177,9 @@
             <p class="question-texte">Quelle est l'année de la mission ?</p>
 
             <div class="input-group">
-                <input type="text" id="reponse-input-1" placeholder="Votre réponse">
+                <input type="text" id="reponse-input-1" placeholder="Votre réponse" autocomplete="off">
                 <br>
-                <button id="btn-valider-1" onclick="verifierEtape1()">Valider</button>
+                <button type="button" id="btn-valider-1" onclick="verifierEtape1()">Valider</button>
             </div>
 
             <p class="compteur" id="texte-compteur-1">Tentatives restantes : <span id="nb-essais-1">4</span></p>
@@ -198,9 +198,9 @@
             <p class="indice-audio" id="texte-indice-audio">Vos yeux ne suffiront pas ici. Mettez le son</p>
 
             <div class="input-group" id="zone-saisie-2">
-                <input type="text" id="reponse-input-2" placeholder="Saisissez votre réponse">
+                <input type="text" id="reponse-input-2" placeholder="Saisissez votre réponse" autocomplete="off">
                 <br>
-                <button id="btn-valider-2" onclick="verifierEtape2()">Valider</button>
+                <button type="button" id="btn-valider-2" onclick="verifierEtape2()">Valider</button>
             </div>
 
             <p class="compteur" id="texte-compteur-2">Tentatives restantes : <span id="nb-essais-2">4</span></p>
@@ -216,7 +216,7 @@
             <p>Sachez que l'immersion purement récréative est considérée comme une véritable hérésie psychiatrique. Quiconque s'aventurera dans l'eau salée par simple plaisir du jeu sera immédiatement arrêté et renvoyé chez lui par le tout premier train ! L'océan est une austère officine médicale, pas un charmant salon de thé mondain. Pour tremper un orteil, vous devez impérativement détenir l'ordonnance dument tamponnée par le Médecin Inspecteur des Bains. Les gloussements, les éclaboussures ludiques et autres conversations frivoles entre deux vagues glaçantes sont formellement proscrits.</p>
             
             <div class="encart-indice">
-                <button id="btn-indice" onclick="afficherIndice()">Obtenir mon indice</button>
+                <button type="button" id="btn-indice" onclick="afficherIndice()">Obtenir mon indice</button>
                 <div id="texte-indice">
                     <p>Voici votre indice : <strong>La deuxième molette est un nombre impair.</strong></p>
                     <p><em>Conservez-le précieusement pour espérer ouvrir le cadenas du coffre.</em></p>
@@ -306,14 +306,14 @@
         }
 
         // --- Gestion de la touche Entrée ---
-        document.getElementById("reponse-input-1").addEventListener("keypress", function(e) {
+        document.getElementById("reponse-input-1").addEventListener("keyup", function(e) {
             if (e.key === "Enter") {
                 e.preventDefault();
                 verifierEtape1();
             }
         });
 
-        document.getElementById("reponse-input-2").addEventListener("keypress", function(e) {
+        document.getElementById("reponse-input-2").addEventListener("keyup", function(e) {
             if (e.key === "Enter") {
                 e.preventDefault();
                 verifierEtape2();
