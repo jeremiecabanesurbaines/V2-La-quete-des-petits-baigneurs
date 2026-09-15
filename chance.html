@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>La Quête des Petits Baigneurs - Énigme</title>
+    <style>
+        body {
+            font-family: "American Typewriter", "Courier New", Courier, serif;
+            background-color: #ffffff;
+            color: #333333;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            text-align: center;
+        }
+
+        .container {
+            max-width: 600px;
+            width: 100%;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .logo {
+            max-width: 250px;
+            width: 100%;
+            height: auto;
+            margin-bottom: 30px;
+        }
+
+        .photo-observation {
+            max-width: 100%;
+            height: auto;
+            border: 2px solid #333;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+
+        .question-texte, .enigme-texte {
+            font-size: 1.2rem;
+            line-height: 1.5;
+            margin-bottom: 20px;
+        }
+
+        .fw-light { font-weight: 300; }
+        .fw-regular { font-weight: 400; }
+        .fw-bold { font-weight: bold; }
+
+        .animation-ligne {
+            margin-top: 5px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            min-height: 1.5em; /* Évite les sauts de page pendant l'animation */
+        }
+
+        .word-superstition {
+            position: relative;
+            display: inline-block;
+            font-weight: 400; /* Même graisse (regular) que la phrase */
+        }
+
+        /* Le trait qui vient barrer le mot "superstition" */
+        .word-superstition::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 55%;
+            width: 0;
+            height: 2px;
+            background-color: #333;
+            animation: strike-anim 9s infinite;
+        }
+
+        /* Le mot "superposition" masqué au début */
+        .word-superposition {
+            display: inline-block;
+            overflow: hidden;
+            white-space: nowrap;
+            vertical-align: bottom;
+            margin-left: 8px;
+            max-width: 0;
+            opacity: 0;
+            animation: type-anim 9s infinite;
+        }
+
+        /* Déroulement de l'animation sur 9 secondes */
+        @keyframes strike-anim {
+            0%, 33.33% { width: 0; } /* Temps 1 : Pas de trait */
+            33.34%, 100% { width: 100%; } /* Temps 2 et 3 : Mot barré */
+        }
+
+        @keyframes type-anim {
+            0%, 33.33% { max-width: 0; opacity: 0; } /* Temps 1 : Caché */
+            33.34% { max-width: 0; opacity: 1; } /* Début du temps 2 : Devient visible mais largeur 0 */
+            66.66%, 100% { max-width: 200px; opacity: 1; } /* Temps 2 et 3 : S'affiche lettre à lettre jusqu'à la taille max */
+        }
+
+        /* --- Visuel réduit --- */
+        .visuel-enigme {
+            max-width: 150px; /* Taille diminuée */
+            margin-bottom: 30px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        input[type="text"] {
+            font-family: "American Typewriter", "Courier New", Courier, serif;
+            font-size: 1rem;
+            padding: 10px 15px;
+            border: 2px solid #333;
+            border-radius: 4px;
+            width: 250px;
+            margin-bottom: 10px;
+            outline: none;
+            box-sizing: border-box;
+        }
+
+        input[type="text"]::placeholder {
+            color: #999;
+            font-style: italic;
+        }
+
+        button {
+            font-family: "American Typewriter", "Courier New", Courier, serif;
+            font-size: 1rem;
+            font-weight: bold;
+            padding: 10px 20px;
+            background-color: #333;
+            color: white;
+            border: 2px solid #333;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        button:hover {
+            background-color: white;
+            color: #333;
+        }
+
+        button:disabled, input:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .compteur {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .erreur {
+            color: #d9534f;
+            font-weight: bold;
+            margin-top: 10px;
+            display: none;
+        }
+
+        /* --- Zones masquées par défaut --- */
+        #zone-enigme, #message-resultat {
+            display: none;
+        }
+
+        #message-resultat {
+            margin-top: 20px;
+            padding: 20px;
+            border: 1px solid #333;
+            background-color: #f9f9f9;
+            text-align: left;
+        }
+
+        #message-resultat h3 {
+            margin-top: 0;
+            text-align: center;
+        }
+
+        /* --- Style de l'encart Indice --- */
+        .encart-indice {
+            margin-top: 30px;
+            padding: 20px;
+            border: 2px dashed #333;
+            background-color: #ffffff;
+            text-align: center;
+        }
+
+        #texte-indice {
+            display: none;
+            font-size: 1.1rem;
+            color: #333;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- Logo conservé en haut de page -->
+        <img src="Turquoise Logo petits baigneurs0.png" alt="Logo La Quête des Petits Baigneurs" class="logo">
+
+        <!-- ÉTAPE 1 : ÉPREUVE D'OBSERVATION -->
+        <div id="zone-observation">
+            <img src="casino.jpg" alt="Photo Casino" class="photo-observation">
+            
+            <p class="question-texte fw-regular">
+                Quel paris ?
+            </p>
+
+            <div class="input-group">
+                <input type="text" id="reponse-obs-input" placeholder="Votre réponse">
+                <br>
+                <button id="btn-valider-obs" onclick="verifierObservation()">Débloquer l'énigme</button>
+            </div>
+
+            <div id="erreur-obs" class="erreur">Mauvaise réponse. Regardez bien la photo !</div>
+        </div>
+
+        <!-- ÉTAPE 2 : ÉNIGME (Masquée au départ) -->
+        <div id="zone-enigme">
+            <div class="enigme-texte fw-regular">
+                Parfois, tout est histoire de<br>
+                <div class="animation-ligne">
+                    <span class="word-superstition">superstition</span>
+                    <span class="word-superposition fw-bold">superposition</span>
+                </div>
+            </div>
+
+            <img src="Visuel + -.png" alt="Visuel" class="visuel-enigme">
+
+            <div class="input-group" id="zone-saisie-enigme">
+                <input type="text" id="reponse-input" placeholder="Saisissez votre réponse">
+                <br>
+                <button id="btn-valider" onclick="verifierReponse()">Valider</button>
+            </div>
+
+            <p class="compteur" id="texte-compteur">Tentatives restantes : <span id="nb-essais">4</span></p>
+
+            <div id="message-erreur" class="erreur">Mauvaise réponse. Essayez encore !</div>
+
+            <div id="message-resultat">
+                <h3>Bravo !</h3>
+                <p>Ah, le Casino de Châtelaillon ! Même si son architecture a été modernisée avec le temps, son emplacement stratégique et son concept sont l'héritage direct des grands établissements de notre chère Belle Époque. C'est notre prestigieux lieu de perdition élégant, le cœur battant de nos soirées festives. C'est surtout ici que ces messieurs se retirent prudemment pour fumer le cigare et jouer aux cartes. Surtout lorsque l'heure redoutée de la baignade féminine approche sur la plage !</p>
+                <p>Car n’oubliez jamais la règle de notre sacro-saint code :</p>
+                <p><strong>La Cloche de la Vertu et le Péril de la Lorgnette !</strong></p>
+                <p>Sachez que la mixité aquatique est le naufrage absolu de la moralité française. Nos plages sont très strictement séparées par sexe. Lorsqu'une lourde cloche retentit au loin pour annoncer le bain exclusif des Dames, les Messieurs ont l'obligation absolue de tourner le dos à l'océan. Ils fileront se réfugier au Casino sans le moindre délai ! De plus, prenez garde : la longue-vue est considérée comme l'instrument du Diable en personne. L'usage de jumelles, de lorgnons ou de tout autre artifice d'optique pointé perfidement vers les cabines des dames est un crime de lèse-pudeur sévèrement réprimé !</p>
+                
+                <div class="encart-indice">
+                    <button id="btn-indice" onclick="afficherIndice()">Obtenir mon indice</button>
+                    <div id="texte-indice">
+                        <p>Voici votre indice : <strong>Le chiffre de la première molette est un nombre impair.</strong></p>
+                        <p><em>Conservez-le précieusement pour espérer ouvrir le cadenas du coffre.</em></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- LOGIQUE ÉTAPE 1 : OBSERVATION ---
+        const reponsesObsAcceptees = ["audacieux"];
+
+        function verifierObservation() {
+            const inputObs = document.getElementById("reponse-obs-input");
+            const errObs = document.getElementById("erreur-obs");
+            const reponseJoueur = inputObs.value.trim().toLowerCase();
+
+            if (reponsesObsAcceptees.includes(reponseJoueur)) {
+                document.getElementById("zone-observation").style.display = "none";
+                document.getElementById("zone-enigme").style.display = "block";
+            } else {
+                errObs.style.display = "block";
+                inputObs.value = "";
+            }
+        }
+
+        document.getElementById("reponse-obs-input").addEventListener("keypress", function(event) {
+            if (event.key === "Enter") {
+                event.preventDefault();
+                verifierObservation();
+            }
+        });
+
+
+        // --- LOGIQUE ÉTAPE 2 : ÉNIGME ---
+        let tentativesRestantes = 4;
+        const reponsesAcceptees = ["9", "neuf"]; 
+
+        function verifierReponse() {
+            const inputElement = document.getElementById("reponse-input");
+            const btnElement = document.getElementById("btn-valider");
+            const msgErreur = document.getElementById("message-erreur");
+            const msgResultat = document.getElementById("message-resultat");
+            const nbEssaisElement = document.getElementById("nb-essais");
+
+            const reponseJoueur = inputElement.value.trim().toLowerCase();
+
+            if (reponseJoueur === "") return; 
+
+            if (reponsesAcceptees.includes(reponseJoueur)) {
+                document.getElementById("zone-saisie-enigme").style.display = "none";
+                document.querySelector(".enigme-texte").style.display = "none";
+                document.querySelector(".visuel-enigme").style.display = "none";
+                document.getElementById("texte-compteur").style.display = "none";
+                msgErreur.style.display = "none";
+                msgResultat.style.display = "block";
+            } else {
+                tentativesRestantes--;
+                nbEssaisElement.textContent = tentativesRestantes;
+                msgErreur.style.display = "block";
+                
+                inputElement.value = "";
+
+                if (tentativesRestantes <= 0) {
+                    inputElement.disabled = true;
+                    btnElement.disabled = true;
+                    msgErreur.textContent = "Vous n'avez plus de tentatives ! L'énigme est bloquée.";
+                }
+            }
+        }
+
+        function afficherIndice() {
+            document.getElementById("btn-indice").style.display = "none";
+            document.getElementById("texte-indice").style.display = "block";
+        }
+
+        document.getElementById("reponse-input").addEventListener("keypress", function(event) {
+            if (event.key === "Enter") {
+                event.preventDefault();
+                verifierReponse();
+            }
+        });
+    </script>
+
+</body>
+</html>
