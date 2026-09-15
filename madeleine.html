@@ -33,8 +33,7 @@
             margin-bottom: 30px;
         }
 
-        /* --- Image Étape 1 --- */
-        .photo-etape {
+        .photo-observation {
             max-width: 100%;
             height: auto;
             border: 2px solid #333;
@@ -43,10 +42,9 @@
         }
 
         .question-texte {
-            font-size: 1.1rem;
-            font-weight: bold;
+            font-size: 1.2rem;
+            line-height: 1.5;
             margin-bottom: 20px;
-            color: #333;
         }
 
         /* --- Contrôles Audio --- */
@@ -69,6 +67,7 @@
             transform: scale(1.1);
         }
         
+        /* Style pour l'indice audio */
         .indice-audio {
             font-size: 1rem;
             font-style: italic;
@@ -76,6 +75,10 @@
             margin-top: 0;
             margin-bottom: 25px;
         }
+
+        .fw-light { font-weight: 300; }
+        .fw-regular { font-weight: 400; }
+        .fw-bold { font-weight: bold; }
 
         .input-group {
             margin-bottom: 20px;
@@ -127,8 +130,19 @@
             margin-bottom: 20px;
         }
 
-        #message-resultat {
+        .erreur {
+            color: #d9534f;
+            font-weight: bold;
+            margin-top: 10px;
             display: none;
+        }
+
+        /* --- Zones masquées par défaut --- */
+        #zone-enigme, #message-resultat {
+            display: none;
+        }
+
+        #message-resultat {
             margin-top: 20px;
             padding: 20px;
             border: 1px solid #333;
@@ -139,13 +153,6 @@
         #message-resultat h3 {
             margin-top: 0;
             text-align: center;
-        }
-
-        .erreur {
-            color: #d9534f;
-            font-weight: bold;
-            margin-top: 10px;
-            display: none;
         }
 
         /* --- Style de l'encart Indice --- */
@@ -168,26 +175,28 @@
 <body>
 
     <div class="container">
-        <!-- Logo en haut de page -->
+        <!-- Logo conservé en haut de page -->
         <img src="Rouge Logo petits baigneurs0.png" alt="Logo La Quête des Petits Baigneurs" class="logo">
 
-        <!-- ================= ÉTAPE 1 : OBSERVATION ================= -->
-        <div id="etape-1">
-            <img src="madeleine.jpeg" alt="Église Sainte-Madeleine" class="photo-etape">
-            <p class="question-texte">Quelle est l'année de la mission ?</p>
+        <!-- ÉTAPE 1 : ÉPREUVE D'OBSERVATION -->
+        <div id="zone-observation">
+            <img src="madeleine.jpg" alt="Photo Église" class="photo-observation">
+            
+            <p class="question-texte fw-regular">
+                Quelle est l'année de la mission ?
+            </p>
 
             <div class="input-group">
-                <input type="text" id="reponse-input-1" placeholder="Votre réponse" autocomplete="off">
+                <input type="text" id="reponse-obs-input" placeholder="Votre réponse" autocomplete="off">
                 <br>
-                <button type="button" id="btn-valider-1" onclick="verifierEtape1()">Valider</button>
+                <button type="button" id="btn-valider-obs" onclick="verifierObservation()">Débloquer l'énigme</button>
             </div>
 
-            <p class="compteur" id="texte-compteur-1">Tentatives restantes : <span id="nb-essais-1">4</span></p>
-            <div id="message-erreur-1" class="erreur">Mauvaise réponse. Essayez encore !</div>
+            <div id="erreur-obs" class="erreur">Mauvaise réponse. Regardez bien la photo !</div>
         </div>
 
-        <!-- ================= ÉTAPE 2 : AUDIO (cachée au départ) ================= -->
-        <div id="etape-2" style="display: none;">
+        <!-- ÉTAPE 2 : ÉNIGME (Masquée au départ) -->
+        <div id="zone-enigme">
             <audio id="enigme-audio" src="Kalimba-lecture-notes-Japonais.mp3"></audio>
             
             <div class="audio-controls" id="zone-audio">
@@ -197,72 +206,66 @@
             
             <p class="indice-audio" id="texte-indice-audio">Vos yeux ne suffiront pas ici. Mettez le son</p>
 
-            <div class="input-group" id="zone-saisie-2">
-                <input type="text" id="reponse-input-2" placeholder="Saisissez votre réponse" autocomplete="off">
+            <div class="input-group" id="zone-saisie">
+                <input type="text" id="reponse-input" placeholder="Saisissez votre réponse" autocomplete="off">
                 <br>
-                <button type="button" id="btn-valider-2" onclick="verifierEtape2()">Valider</button>
+                <button type="button" id="btn-valider" onclick="verifierReponse()">Valider</button>
             </div>
 
-            <p class="compteur" id="texte-compteur-2">Tentatives restantes : <span id="nb-essais-2">4</span></p>
-            <div id="message-erreur-2" class="erreur">Mauvaise réponse. Essayez encore !</div>
-        </div>
+            <p class="compteur" id="texte-compteur">Tentatives restantes : <span id="nb-essais">4</span></p>
 
-        <!-- ================= RÉSULTAT FINAL ================= -->
-        <div id="message-resultat">
-            <h3>Bravo !</h3>
-            <p>La croissance tout bonnement exponentielle de notre belle station balnéaire a nécessité quelques ajustements spirituels d'envergure. Il a fallu rapidement ordonner la construction de cette très imposante église Sainte-Madeleine pour accueillir dignement la ferveur de nos riches estivants. Car la villégiature et les bains de mer n'excluent en rien la foi fervente, ni la plus stricte rigueur morale ! N'oubliez jamais que la mer est une création divine dotée de puissantes vertus curatives, et non un vulgaire terrain de jeu pour enfants dissipés.</p>
-            <p>Prenez donc bonne note de cette nouvelle règle fondamentale.</p>
-            <p><strong>De l'Ordonnance Médicale et de la Flânerie Aquatique !</strong></p>
-            <p>Sachez que l'immersion purement récréative est considérée comme une véritable hérésie psychiatrique. Quiconque s'aventurera dans l'eau salée par simple plaisir du jeu sera immédiatement arrêté et renvoyé chez lui par le tout premier train ! L'océan est une austère officine médicale, pas un charmant salon de thé mondain. Pour tremper un orteil, vous devez impérativement détenir l'ordonnance dument tamponnée par le Médecin Inspecteur des Bains. Les gloussements, les éclaboussures ludiques et autres conversations frivoles entre deux vagues glaçantes sont formellement proscrits.</p>
-            
-            <div class="encart-indice">
-                <button type="button" id="btn-indice" onclick="afficherIndice()">Obtenir mon indice</button>
-                <div id="texte-indice">
-                    <p>Voici votre indice : <strong>La deuxième molette est un nombre impair.</strong></p>
-                    <p><em>Conservez-le précieusement pour espérer ouvrir le cadenas du coffre.</em></p>
+            <div id="message-erreur" class="erreur">Mauvaise réponse. Essayez encore !</div>
+
+            <div id="message-resultat">
+                <h3>Bravo !</h3>
+                <p>La croissance tout bonnement exponentielle de notre belle station balnéaire a nécessité quelques ajustements spirituels d'envergure. Il a fallu rapidement ordonner la construction de cette très imposante église Sainte-Madeleine pour accueillir dignement la ferveur de nos riches estivants. Car la villégiature et les bains de mer n'excluent en rien la foi fervente, ni la plus stricte rigueur morale ! N'oubliez jamais que la mer est une création divine dotée de puissantes vertus curatives, et non un vulgaire terrain de jeu pour enfants dissipés.</p>
+                <p>Prenez donc bonne note de cette nouvelle règle fondamentale.</p>
+                <p><strong>De l'Ordonnance Médicale et de la Flânerie Aquatique !</strong></p>
+                <p>Sachez que l'immersion purement récréative est considérée comme une véritable hérésie psychiatrique. Quiconque s'aventurera dans l'eau salée par simple plaisir du jeu sera immédiatement arrêté et renvoyé chez lui par le tout premier train ! L'océan est une austère officine médicale, pas un charmant salon de thé mondain. Pour tremper un orteil, vous devez impérativement détenir l'ordonnance dument tamponnée par le Médecin Inspecteur des Bains. Les gloussements, les éclaboussures ludiques et autres conversations frivoles entre deux vagues glaçantes sont formellement proscrits.</p>
+                
+                <div class="encart-indice">
+                    <button type="button" id="btn-indice" onclick="afficherIndice()">Obtenir mon indice</button>
+                    <div id="texte-indice">
+                        <p>Voici votre indice : <strong>La deuxième molette est un nombre impair.</strong></p>
+                        <p><em>Conservez-le précieusement pour espérer ouvrir le cadenas du coffre.</em></p>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        // --- Variables Étape 1 ---
-        let essaisEtape1 = 4;
-        const reponseEtape1 = "1937";
+        // --- LOGIQUE ÉTAPE 1 : OBSERVATION ---
+        const reponsesObsAcceptees = ["1937"];
 
-        // --- Variables Étape 2 ---
-        let essaisEtape2 = 4;
-        const reponsesEtape2 = ["auclair de la lune", "au clair de la lune"];
-        const audio = document.getElementById("enigme-audio");
+        function verifierObservation() {
+            const inputObs = document.getElementById("reponse-obs-input");
+            const errObs = document.getElementById("erreur-obs");
+            const reponseJoueur = inputObs.value.trim();
 
-        // --- Fonctions Étape 1 ---
-        function verifierEtape1() {
-            const input = document.getElementById("reponse-input-1");
-            const btn = document.getElementById("btn-valider-1");
-            const msgErreur = document.getElementById("message-erreur-1");
-            const nbEssais = document.getElementById("nb-essais-1");
-
-            const val = input.value.trim();
-            if (val === "") return;
-
-            if (val === reponseEtape1) {
-                document.getElementById("etape-1").style.display = "none";
-                document.getElementById("etape-2").style.display = "block";
+            if (reponsesObsAcceptees.includes(reponseJoueur)) {
+                document.getElementById("zone-observation").style.display = "none";
+                document.getElementById("zone-enigme").style.display = "block";
             } else {
-                essaisEtape1--;
-                nbEssais.textContent = essaisEtape1;
-                msgErreur.style.display = "block";
-                input.value = "";
-
-                if (essaisEtape1 <= 0) {
-                    input.disabled = true;
-                    btn.disabled = true;
-                    msgErreur.textContent = "Vous n'avez plus de tentatives ! L'énigme est bloquée.";
-                }
+                errObs.style.display = "block";
+                inputObs.value = "";
             }
         }
 
-        // --- Fonctions Étape 2 ---
+        document.getElementById("reponse-obs-input").addEventListener("keyup", function(event) {
+            if (event.key === "Enter") {
+                event.preventDefault();
+                verifierObservation();
+            }
+        });
+
+
+        // --- LOGIQUE ÉTAPE 2 : ÉNIGME AUDIO ---
+        let tentativesRestantes = 4;
+        const reponsesAcceptees = ["auclair de la lune", "au clair de la lune"]; 
+
+        const audio = document.getElementById("enigme-audio");
+
         function jouerAudio() {
             audio.play();
         }
@@ -271,52 +274,50 @@
             audio.pause();
         }
 
-        function verifierEtape2() {
-            const input = document.getElementById("reponse-input-2");
-            const btn = document.getElementById("btn-valider-2");
-            const msgErreur = document.getElementById("message-erreur-2");
+        function verifierReponse() {
+            const inputElement = document.getElementById("reponse-input");
+            const btnElement = document.getElementById("btn-valider");
+            const msgErreur = document.getElementById("message-erreur");
             const msgResultat = document.getElementById("message-resultat");
-            const nbEssais = document.getElementById("nb-essais-2");
+            const nbEssaisElement = document.getElementById("nb-essais");
 
-            const val = input.value.trim().toLowerCase();
-            if (val === "") return;
+            const reponseJoueur = inputElement.value.trim().toLowerCase();
 
-            if (reponsesEtape2.includes(val)) {
+            if (reponseJoueur === "") return; 
+
+            if (reponsesAcceptees.includes(reponseJoueur)) {
                 stopperAudio();
-                document.getElementById("etape-2").style.display = "none";
+                
+                document.getElementById("zone-saisie").style.display = "none";
+                document.getElementById("zone-audio").style.display = "none";
+                document.getElementById("texte-indice-audio").style.display = "none";
+                document.getElementById("texte-compteur").style.display = "none";
+                msgErreur.style.display = "none";
                 msgResultat.style.display = "block";
             } else {
-                essaisEtape2--;
-                nbEssais.textContent = essaisEtape2;
+                tentativesRestantes--;
+                nbEssaisElement.textContent = tentativesRestantes;
                 msgErreur.style.display = "block";
-                input.value = "";
+                
+                inputElement.value = "";
 
-                if (essaisEtape2 <= 0) {
-                    input.disabled = true;
-                    btn.disabled = true;
+                if (tentativesRestantes <= 0) {
+                    inputElement.disabled = true;
+                    btnElement.disabled = true;
                     msgErreur.textContent = "Vous n'avez plus de tentatives ! L'énigme est bloquée.";
                 }
             }
         }
 
-        // --- Indice Final ---
         function afficherIndice() {
             document.getElementById("btn-indice").style.display = "none";
             document.getElementById("texte-indice").style.display = "block";
         }
 
-        // --- Gestion de la touche Entrée ---
-        document.getElementById("reponse-input-1").addEventListener("keyup", function(e) {
-            if (e.key === "Enter") {
-                e.preventDefault();
-                verifierEtape1();
-            }
-        });
-
-        document.getElementById("reponse-input-2").addEventListener("keyup", function(e) {
-            if (e.key === "Enter") {
-                e.preventDefault();
-                verifierEtape2();
+        document.getElementById("reponse-input").addEventListener("keyup", function(event) {
+            if (event.key === "Enter") {
+                event.preventDefault();
+                verifierReponse();
             }
         });
     </script>
